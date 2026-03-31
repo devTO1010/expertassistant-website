@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpertAssistant — Estimate Faster. Get Paid Faster. Grow Faster.</title>
+  <meta name="description" content="ExpertAssistant is the AI-powered operations platform for electrical contractors. Voice-first estimation, blueprint analysis, QuickBooks integration, and crew management — all in one system.">
+  <meta name="keywords" content="electrical contractor software, estimate software, voice estimation, blueprint analysis, QuickBooks integration, contractor management, electrical estimating">
+  <meta property="og:title" content="ExpertAssistant — AI-Powered Contractor Operations">
+  <meta property="og:description" content="Estimate faster. Get paid faster. Grow faster. The AI platform that eliminates the estimation bottleneck for electrical contractors.">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafafa;
+      --bg-alt: #ffffff;
+      --bg-dark: #0f172a;
+      --bg-dark-alt: #1e293b;
+      --border: #e2e8f0;
+      --border-dark: #334155;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-on-dark: #f1f5f9;
+      --text-on-dark-secondary: #94a3b8;
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --primary-glow: rgba(37, 99, 235, 0.1);
+      --primary-dark: #1d4ed8;
+      --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.1);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.1);
+      --violet: #8b5cf6;
+      --violet-glow: rgba(139, 92, 246, 0.1);
+      --rose: #f43f5e;
+      --rose-glow: rgba(244, 63, 94, 0.1);
+      --cyan: #06b6d4;
+      --cyan-glow: rgba(6, 182, 212, 0.1);
+      --gradient: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+      --gradient-text: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --radius: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .gradient-text {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-label {
+      font-size: 13px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(32px, 5vw, 48px); font-weight: 800;
+      line-height: 1.15; margin-bottom: 16px; color: var(--text);
+    }
+    .section-desc {
+      font-size: 18px; color: var(--text-secondary);
+      max-width: 640px; line-height: 1.7;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .fade-in.delay-1 { transition-delay: 0.1s; }
+    .fade-in.delay-2 { transition-delay: 0.2s; }
+    .fade-in.delay-3 { transition-delay: 0.3s; }
+    .fade-in.delay-4 { transition-delay: 0.4s; }
+    .fade-in.delay-5 { transition-delay: 0.5s; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 0; background: transparent; transition: all 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border); padding: 12px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; font-weight: 800; font-size: 20px; color: var(--text);
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px; background: var(--gradient);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-secondary);
+      font-size: 14px; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); box-shadow: 0 4px 20px rgba(37,99,235,0.3); transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--primary); background: var(--primary-glow); }
+    .btn-lg { padding: 14px 32px; font-size: 16px; border-radius: 12px; }
+    .btn-white { background: white; color: var(--text); }
+    .btn-white:hover { background: #f1f5f9; }
+    .btn-outline-white { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); }
+    .btn-outline-white:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); }
+    .hamburger { display: none; background: none; border: none; color: var(--text); cursor: pointer; }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 160px 0 100px; position: relative; overflow: hidden;
+      background: linear-gradient(180deg, #eff6ff 0%, #fafafa 100%);
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -300px; right: -200px;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 70%);
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -200px; left: -150px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%);
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center; position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px 6px 8px; background: white; border: 1px solid var(--border);
+      border-radius: 100px; font-size: 13px; color: var(--text-secondary);
+      margin-bottom: 24px; box-shadow: var(--shadow-sm);
+      animation: fadeInUp 0.6s ease;
+    }
+    .hero-badge-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--amber-glow); color: var(--amber);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 60px); font-weight: 900; line-height: 1.08;
+      margin-bottom: 20px; animation: fadeInUp 0.6s ease 0.1s both;
+    }
+    .hero-subtitle {
+      font-size: 18px; color: var(--text-secondary); line-height: 1.7;
+      margin-bottom: 32px; max-width: 520px;
+      animation: fadeInUp 0.6s ease 0.2s both;
+    }
+    .hero-ctas {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease 0.3s both;
+    }
+    .hero-visual {
+      animation: fadeInUp 0.6s ease 0.4s both;
+    }
+    .hero-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .hero-card-header {
+      padding: 16px 20px; background: var(--bg-dark);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-card-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .hero-card-body { padding: 24px; }
+    .voice-wave {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; background: var(--primary-glow);
+      border: 1px solid rgba(37,99,235,0.15);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .voice-wave-icon { color: var(--primary); flex-shrink: 0; }
+    .voice-wave-bars {
+      display: flex; align-items: center; gap: 3px; flex: 1;
+    }
+    .voice-bar {
+      width: 3px; border-radius: 2px; background: var(--primary);
+      animation: voice-pulse 1.2s ease infinite;
+    }
+    .voice-bar:nth-child(1) { height: 12px; animation-delay: 0s; }
+    .voice-bar:nth-child(2) { height: 20px; animation-delay: 0.1s; }
+    .voice-bar:nth-child(3) { height: 16px; animation-delay: 0.2s; }
+    .voice-bar:nth-child(4) { height: 24px; animation-delay: 0.3s; }
+    .voice-bar:nth-child(5) { height: 18px; animation-delay: 0.15s; }
+    .voice-bar:nth-child(6) { height: 14px; animation-delay: 0.25s; }
+    .voice-bar:nth-child(7) { height: 22px; animation-delay: 0.35s; }
+    .voice-bar:nth-child(8) { height: 10px; animation-delay: 0.05s; }
+    .voice-bar:nth-child(9) { height: 18px; animation-delay: 0.2s; }
+    .voice-bar:nth-child(10) { height: 14px; animation-delay: 0.3s; }
+    @keyframes voice-pulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(0.6); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+    .voice-transcript {
+      font-size: 14px; color: var(--text-secondary);
+      font-style: italic; margin-bottom: 20px;
+      padding: 0 4px;
+    }
+    .voice-transcript strong { color: var(--text); font-style: normal; }
+    .estimate-line {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; border-radius: 8px; font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .estimate-line:nth-child(odd) { background: #f8fafc; }
+    .estimate-line-name { font-weight: 600; }
+    .estimate-line-detail { color: var(--text-muted); font-size: 12px; }
+    .estimate-line-price { font-weight: 700; color: var(--primary); }
+    .estimate-confidence {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--emerald); font-weight: 600;
+      margin-top: 12px; padding: 0 4px;
+    }
+
+    /* ===== PROBLEM ===== */
+    .problem {
+      padding: 100px 0; background: var(--bg-dark); color: var(--text-on-dark);
+    }
+    .problem-header { text-align: center; margin-bottom: 56px; }
+    .problem-header .section-label { color: var(--amber); }
+    .problem-header .section-title { color: var(--text-on-dark); }
+    .problem-header .section-desc { color: var(--text-on-dark-secondary); margin: 0 auto; }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .problem-card {
+      background: var(--bg-dark-alt); border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg); padding: 32px;
+      transition: all 0.3s;
+    }
+    .problem-card:hover { border-color: var(--amber); transform: translateY(-4px); }
+    .problem-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .problem-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: white; }
+    .problem-card p { font-size: 14px; color: var(--text-on-dark-secondary); line-height: 1.7; }
+    .problem-stat {
+      font-size: 32px; font-weight: 800; color: var(--amber); margin-bottom: 4px;
+    }
+
+    /* ===== FEATURES ===== */
+    .features { padding: 120px 0; }
+    .features-header { text-align: center; margin-bottom: 64px; }
+    .features-header .section-desc { margin: 0 auto; }
+
+    .feature-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center; margin-bottom: 100px;
+    }
+    .feature-row:nth-child(even) .feature-visual { order: -1; }
+    .feature-row:last-child { margin-bottom: 0; }
+    .feature-content .section-label { margin-bottom: 8px; }
+    .feature-content h3 {
+      font-size: clamp(26px, 3.5vw, 36px); font-weight: 800;
+      line-height: 1.15; margin-bottom: 16px;
+    }
+    .feature-content p {
+      font-size: 16px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px;
+    }
+    .feature-bullets { list-style: none; }
+    .feature-bullets li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 8px 0; font-size: 14px; color: var(--text-secondary);
+    }
+    .feature-bullets li i { color: var(--emerald); margin-top: 3px; flex-shrink: 0; }
+    .feature-visual-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+      padding: 32px; position: relative; overflow: hidden;
+    }
+
+    /* Voice demo */
+    .input-modes {
+      display: flex; gap: 8px; margin-bottom: 20px;
+    }
+    .input-mode {
+      padding: 8px 14px; border-radius: 8px; font-size: 12px;
+      font-weight: 600; border: 1px solid var(--border); cursor: pointer;
+      background: white; color: var(--text-secondary);
+    }
+    .input-mode.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Blueprint demo */
+    .blueprint-layers {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .blueprint-layer {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: var(--radius);
+      border: 1px solid var(--border); transition: all 0.2s;
+    }
+    .blueprint-layer:hover { border-color: var(--primary); background: var(--primary-glow); }
+    .blueprint-layer-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .blueprint-layer-info { flex: 1; }
+    .blueprint-layer-name { font-size: 14px; font-weight: 600; }
+    .blueprint-layer-desc { font-size: 12px; color: var(--text-muted); }
+    .blueprint-layer-count {
+      font-size: 13px; font-weight: 700; color: var(--primary);
+      background: var(--primary-glow); padding: 4px 10px; border-radius: 6px;
+    }
+
+    /* QB demo */
+    .qb-sync-rows { display: flex; flex-direction: column; gap: 8px; }
+    .qb-sync-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-radius: var(--radius);
+      background: #f8fafc; font-size: 13px;
+    }
+    .qb-sync-label { font-weight: 600; }
+    .qb-sync-status {
+      font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 100px;
+    }
+    .qb-sync-status.synced { background: var(--emerald-glow); color: var(--emerald); }
+    .qb-sync-status.pending { background: var(--amber-glow); color: var(--amber); }
+
+    /* ===== 4 APPS ===== */
+    .apps { padding: 120px 0; background: #f1f5f9; }
+    .apps-header { text-align: center; margin-bottom: 64px; }
+    .apps-header .section-desc { margin: 0 auto; }
+    .apps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .app-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 32px 24px;
+      text-align: center; transition: all 0.3s;
+    }
+    .app-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .app-card-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .app-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .app-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .app-card-roles {
+      margin-top: 16px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+    }
+    .app-card-role {
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 100px; border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    /* ===== WORKFLOW ===== */
+    .workflow { padding: 120px 0; }
+    .workflow-header { text-align: center; margin-bottom: 64px; }
+    .workflow-header .section-desc { margin: 0 auto; }
+    .workflow-steps {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+      position: relative;
+    }
+    .workflow-steps::before {
+      content: ''; position: absolute; top: 36px; left: 10%; right: 10%;
+      height: 2px; background: var(--border);
+    }
+    .workflow-step { text-align: center; position: relative; }
+    .workflow-step-num {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: white; border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; font-size: 24px; font-weight: 800;
+      color: var(--primary); position: relative; z-index: 1;
+      box-shadow: var(--shadow-sm); transition: all 0.3s;
+    }
+    .workflow-step:hover .workflow-step-num {
+      background: var(--primary); color: white; border-color: var(--primary);
+      box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+    }
+    .workflow-step h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .workflow-step p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ===== TESTIMONIAL ===== */
+    .testimonial-section {
+      padding: 100px 0; background: var(--bg-dark); color: var(--text-on-dark);
+    }
+    .testimonial-inner {
+      max-width: 720px; margin: 0 auto; text-align: center;
+    }
+    .testimonial-quote {
+      font-size: clamp(20px, 3vw, 28px); font-weight: 500;
+      line-height: 1.6; margin-bottom: 32px; color: #e2e8f0;
+    }
+    .testimonial-author { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .testimonial-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--gradient); display: flex; align-items: center;
+      justify-content: center; font-weight: 700; color: white; font-size: 16px;
+    }
+    .testimonial-name { font-size: 16px; font-weight: 600; }
+    .testimonial-role { font-size: 13px; color: var(--text-on-dark-secondary); }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      padding: 120px 0; text-align: center;
+      background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #2563eb 100%);
+      color: white; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .cta-section .section-label { color: rgba(255,255,255,0.7); }
+    .cta-section .section-title { color: white; margin-bottom: 16px; }
+    .cta-section .section-desc { color: rgba(255,255,255,0.8); margin: 0 auto 36px; }
+    .cta-ctas { display: flex; justify-content: center; gap: 16px; position: relative; z-index: 1; flex-wrap: wrap; }
+
+    /* ===== FOOTER ===== */
+    footer { padding: 48px 0 24px; border-top: 1px solid var(--border); }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 14px; color: var(--text-secondary); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 13px; color: var(--text-muted); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-subtitle { margin: 0 auto 32px; }
+      .hero-ctas { justify-content: center; }
+      .hero-visual { max-width: 480px; margin: 0 auto; }
+      .feature-row { grid-template-columns: 1fr; gap: 40px; }
+      .feature-row:nth-child(even) .feature-visual { order: 0; }
+      .problem-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .apps-grid { grid-template-columns: repeat(2, 1fr); }
+      .workflow-steps { grid-template-columns: repeat(3, 1fr); }
+      .workflow-steps::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .apps-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+      .workflow-steps { grid-template-columns: 1fr 1fr; }
+      .footer-inner { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">
+          <i data-lucide="zap" style="width:20px;height:20px;color:white;"></i>
+        </div>
+        ExpertAssistant
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#cta" class="btn btn-primary">Request a Demo</a></li>
+      </ul>
+      <button class="hamburger" onclick="document.querySelector('.nav-links').style.display = document.querySelector('.nav-links').style.display === 'flex' ? 'none' : 'flex';">
+        <i data-lucide="menu" style="width:24px;height:24px;"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-badge">
+            <div class="hero-badge-icon"><i data-lucide="zap" style="width:14px;height:14px;"></i></div>
+            Built for Electrical Contractors
+          </div>
+          <h1>Estimate Faster.<br><span class="gradient-text">Get Paid Faster.</span><br>Grow Faster.</h1>
+          <p class="hero-subtitle">Your electricians walk the job and talk. AI listens, matches materials to your QuickBooks catalog, and builds the estimate — in minutes, not hours.</p>
+          <div class="hero-ctas">
+            <a href="#cta" class="btn btn-primary btn-lg">
+              Request a Demo
+              <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+            </a>
+            <a href="#features" class="btn btn-secondary btn-lg">
+              See How It Works
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <div class="hero-card-dot" style="background:#ef4444;"></div>
+              <div class="hero-card-dot" style="background:#f59e0b;"></div>
+              <div class="hero-card-dot" style="background:#22c55e;"></div>
+              <span style="font-size:12px;color:#94a3b8;margin-left:8px;">Voice Walkthrough — 1847 Oak Ave</span>
+            </div>
+            <div class="hero-card-body">
+              <div class="voice-wave">
+                <div class="voice-wave-icon"><i data-lucide="mic" style="width:18px;height:18px;"></i></div>
+                <div class="voice-wave-bars">
+                  <div class="voice-bar"></div><div class="voice-bar"></div>
+                  <div class="voice-bar"></div><div class="voice-bar"></div>
+                  <div class="voice-bar"></div><div class="voice-bar"></div>
+                  <div class="voice-bar"></div><div class="voice-bar"></div>
+                  <div class="voice-bar"></div><div class="voice-bar"></div>
+                </div>
+                <span style="font-size:12px;color:var(--primary);font-weight:600;">Recording...</span>
+              </div>
+              <p class="voice-transcript">"<strong>200-amp panel upgrade</strong>, replacing Federal Pacific. Run <strong>2-inch EMT</strong> from meter to panel, about <strong>35 feet</strong>. Need <strong>two 20-amp GFCI circuits</strong> for the kitchen..."</p>
+              <div class="estimate-line">
+                <div>
+                  <div class="estimate-line-name">200A Main Breaker Panel</div>
+                  <div class="estimate-line-detail">Square D HOM3060M200PC</div>
+                </div>
+                <div class="estimate-line-price">$487.00</div>
+              </div>
+              <div class="estimate-line">
+                <div>
+                  <div class="estimate-line-name">2" EMT Conduit (35 ft)</div>
+                  <div class="estimate-line-detail">4 x 10ft sticks + fittings</div>
+                </div>
+                <div class="estimate-line-price">$124.80</div>
+              </div>
+              <div class="estimate-line">
+                <div>
+                  <div class="estimate-line-name">20A GFCI Breaker (x2)</div>
+                  <div class="estimate-line-detail">Square D HOM120GFI</div>
+                </div>
+                <div class="estimate-line-price">$89.40</div>
+              </div>
+              <div class="estimate-confidence">
+                <i data-lucide="check-circle" style="width:14px;height:14px;"></i>
+                92% catalog match &bull; 3 items extracted &bull; Review draft
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem">
+    <div class="container">
+      <div class="problem-header">
+        <div class="section-label">The Problem</div>
+        <h2 class="section-title">Your Best Estimator Is Your Biggest Bottleneck</h2>
+        <p class="section-desc">The owner reviews every estimate. Work is scattered across 5+ disconnected tools. Crews wait. Customers wait. Revenue waits.</p>
+      </div>
+      <div class="problem-grid">
+        <div class="problem-card fade-in">
+          <div class="problem-icon" style="background:var(--rose-glow);color:var(--rose);">
+            <i data-lucide="clock" style="width:24px;height:24px;"></i>
+          </div>
+          <div class="problem-stat">15-20 hrs</div>
+          <h3>Per Week on Estimates</h3>
+          <p>The owner is the only person who can estimate. Every residential, commercial, and industrial job bottlenecks through one person.</p>
+        </div>
+        <div class="problem-card fade-in delay-1">
+          <div class="problem-icon" style="background:var(--amber-glow);color:var(--amber);">
+            <i data-lucide="layers" style="width:24px;height:24px;"></i>
+          </div>
+          <div class="problem-stat">5+ Tools</div>
+          <h3>Disconnected Systems</h3>
+          <p>QuickBooks, ClockShark, Teams, Outlook, manual tracking — nothing talks to anything else. Data gets lost between the cracks.</p>
+        </div>
+        <div class="problem-card fade-in delay-2">
+          <div class="problem-icon" style="background:var(--violet-glow);color:var(--violet);">
+            <i data-lucide="trending-down" style="width:24px;height:24px;"></i>
+          </div>
+          <div class="problem-stat">Days Lost</div>
+          <h3>Slow Turnaround</h3>
+          <p>Walkthroughs happen Monday, estimates go out Thursday. By then the customer already called someone else. Speed wins bids.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Walk the Job. Talk the Scope.<br><span class="gradient-text">AI Builds the Estimate.</span></h2>
+        <p class="section-desc">Three input modes, one AI engine, instant estimates matched to your actual QuickBooks catalog and pricing.</p>
+      </div>
+
+      <!-- Voice -->
+      <div class="feature-row fade-in">
+        <div class="feature-content">
+          <div class="section-label">Voice-First Estimation</div>
+          <h3>Speak Naturally. Get a Draft Estimate in Minutes.</h3>
+          <p>Your electricians walk the jobsite and describe what they see — panels, wire runs, circuits, fixtures. AI transcribes with electrical-domain vocabulary, extracts line items, and matches each one to your QuickBooks catalog with confidence scores.</p>
+          <ul class="feature-bullets">
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Real-time transcription with Deepgram Nova-2 (&lt;2s latency)</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Understands wire gauges, NEC references, brand names, electrical shorthand</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Spanish dictation with English output</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Catalog accuracy improves to 95%+ after 2-3 months of use</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Mix voice, catalog browse, and manual entry in the same session</li>
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-visual-card">
+            <div class="input-modes">
+              <div class="input-mode active"><i data-lucide="mic" style="width:12px;height:12px;"></i> Voice</div>
+              <div class="input-mode"><i data-lucide="list" style="width:12px;height:12px;"></i> Catalog</div>
+              <div class="input-mode"><i data-lucide="type" style="width:12px;height:12px;"></i> Manual</div>
+            </div>
+            <div class="voice-wave" style="margin-bottom:20px;">
+              <div class="voice-wave-icon"><i data-lucide="mic" style="width:18px;height:18px;"></i></div>
+              <div class="voice-wave-bars">
+                <div class="voice-bar"></div><div class="voice-bar"></div>
+                <div class="voice-bar"></div><div class="voice-bar"></div>
+                <div class="voice-bar"></div><div class="voice-bar"></div>
+                <div class="voice-bar"></div><div class="voice-bar"></div>
+              </div>
+            </div>
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              <strong style="color:var(--text);">Transcript:</strong> "Run number six wire from the panel to the sub-panel in the garage, about 80 feet, through one-inch EMT..."
+            </p>
+            <div style="border-top:1px solid var(--border);padding-top:16px;">
+              <p style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;">AI Extracted Items</p>
+              <div class="estimate-line"><div><div class="estimate-line-name">#6 THHN Wire (80 ft)</div></div><div class="estimate-line-price">$156.00</div></div>
+              <div class="estimate-line"><div><div class="estimate-line-name">1" EMT Conduit (80 ft)</div></div><div class="estimate-line-price">$98.40</div></div>
+              <div class="estimate-line"><div><div class="estimate-line-name">Sub-Panel 100A</div></div><div class="estimate-line-price">$312.00</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blueprint -->
+      <div class="feature-row fade-in">
+        <div class="feature-content">
+          <div class="section-label">AI Blueprint Analysis</div>
+          <h3>Upload Plans. Get a Material Takeoff.</h3>
+          <p>Drop a blueprint PDF and AI identifies every electrical component — panels, circuits, outlets, switches, fixtures, conduit runs, wire gauges. Materials are mapped to your catalog with quantities and labor hours auto-calculated.</p>
+          <ul class="feature-bullets">
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Detects panels, circuits, outlets, switches, fixtures, conduit, transformers</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Auto-calculates wire footage with waste factor applied</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Distinguishes E, A, M, P sheets automatically</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Visual overlay showing detections color-coded by system</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Low-confidence items flagged for owner review</li>
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-visual-card">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+              <i data-lucide="file-text" style="width:20px;height:20px;color:var(--primary);"></i>
+              <span style="font-size:14px;font-weight:600;">E-101 — First Floor Electrical Plan</span>
+              <span style="font-size:11px;color:var(--emerald);font-weight:600;margin-left:auto;">Analyzed</span>
+            </div>
+            <div class="blueprint-layers">
+              <div class="blueprint-layer">
+                <div class="blueprint-layer-icon" style="background:var(--primary-glow);color:var(--primary);"><i data-lucide="zap" style="width:18px;height:18px;"></i></div>
+                <div class="blueprint-layer-info"><div class="blueprint-layer-name">Panels &amp; Breakers</div><div class="blueprint-layer-desc">200A main + 2 sub-panels identified</div></div>
+                <div class="blueprint-layer-count">3</div>
+              </div>
+              <div class="blueprint-layer">
+                <div class="blueprint-layer-icon" style="background:var(--amber-glow);color:var(--amber);"><i data-lucide="circle-dot" style="width:18px;height:18px;"></i></div>
+                <div class="blueprint-layer-info"><div class="blueprint-layer-name">Receptacles &amp; Switches</div><div class="blueprint-layer-desc">Duplex, GFCI, 3-way, dimmers</div></div>
+                <div class="blueprint-layer-count">47</div>
+              </div>
+              <div class="blueprint-layer">
+                <div class="blueprint-layer-icon" style="background:var(--violet-glow);color:var(--violet);"><i data-lucide="lightbulb" style="width:18px;height:18px;"></i></div>
+                <div class="blueprint-layer-info"><div class="blueprint-layer-name">Lighting Fixtures</div><div class="blueprint-layer-desc">Recessed, troffer, emergency, exit</div></div>
+                <div class="blueprint-layer-count">32</div>
+              </div>
+              <div class="blueprint-layer">
+                <div class="blueprint-layer-icon" style="background:var(--emerald-glow);color:var(--emerald);"><i data-lucide="cable" style="width:18px;height:18px;"></i></div>
+                <div class="blueprint-layer-info"><div class="blueprint-layer-name">Wire &amp; Conduit Runs</div><div class="blueprint-layer-desc">1,240 ft total wire, 380 ft conduit</div></div>
+                <div class="blueprint-layer-count">18</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QuickBooks -->
+      <div class="feature-row fade-in">
+        <div class="feature-content">
+          <div class="section-label">QuickBooks Integration</div>
+          <h3>Your Catalog. Your Prices. Always in Sync.</h3>
+          <p>Bi-directional OAuth sync with QuickBooks Online. Products, customers, labor rates, and invoices stay in sync. AI detects price changes on pending estimates before they go out.</p>
+          <ul class="feature-bullets">
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Bi-directional sync: products, customers, labor rates, invoices</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Price change detection on pending estimates</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> AI duplicate detection and catalog governance</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Markup rules per category and job type</li>
+            <li><i data-lucide="check" style="width:16px;height:16px;"></i> Standard taxonomy: panels, breakers, wire, conduit, fittings, fixtures</li>
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-visual-card">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+              <div style="width:32px;height:32px;background:#2ca01c;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                <span style="color:white;font-weight:800;font-size:14px;">QB</span>
+              </div>
+              <span style="font-size:14px;font-weight:600;">QuickBooks Online</span>
+              <span style="font-size:11px;color:var(--emerald);font-weight:600;margin-left:auto;">Connected</span>
+            </div>
+            <div class="qb-sync-rows">
+              <div class="qb-sync-row">
+                <span class="qb-sync-label">Products &amp; Materials</span>
+                <span>112 items</span>
+                <span class="qb-sync-status synced">Synced</span>
+              </div>
+              <div class="qb-sync-row">
+                <span class="qb-sync-label">Customers</span>
+                <span>48 active</span>
+                <span class="qb-sync-status synced">Synced</span>
+              </div>
+              <div class="qb-sync-row">
+                <span class="qb-sync-label">Labor Rates</span>
+                <span>6 roles</span>
+                <span class="qb-sync-status synced">Synced</span>
+              </div>
+              <div class="qb-sync-row">
+                <span class="qb-sync-label">Invoices</span>
+                <span>3 pending</span>
+                <span class="qb-sync-status pending">Pending</span>
+              </div>
+              <div class="qb-sync-row">
+                <span class="qb-sync-label">Price Changes Detected</span>
+                <span>2 items</span>
+                <span class="qb-sync-status pending">Review</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 APPS -->
+  <section class="apps" id="platform">
+    <div class="container">
+      <div class="apps-header">
+        <div class="section-label">One Platform, Four Apps</div>
+        <h2 class="section-title">Everyone Gets Their Own <span class="gradient-text">Workspace</span></h2>
+        <p class="section-desc">Role-based views for owners, office admins, PMs, bookkeepers, and field crews. One login, one truth.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-card fade-in">
+          <div class="app-card-icon" style="background:var(--primary-glow);color:var(--primary);">
+            <i data-lucide="layout-dashboard" style="width:28px;height:28px;"></i>
+          </div>
+          <h3>Admin Dashboard</h3>
+          <p>Pipeline, estimates, crew management, financial oversight, AI review queue. Everything the office needs.</p>
+          <div class="app-card-roles">
+            <span class="app-card-role">Owner</span>
+            <span class="app-card-role">Office Admin</span>
+            <span class="app-card-role">Bookkeeper</span>
+            <span class="app-card-role">PM</span>
+          </div>
+        </div>
+        <div class="app-card fade-in delay-1">
+          <div class="app-card-icon" style="background:var(--emerald-glow);color:var(--emerald);">
+            <i data-lucide="user-check" style="width:28px;height:28px;"></i>
+          </div>
+          <h3>Customer Portal</h3>
+          <p>Customers view projects, approve estimates, upload blueprints, and review invoices. Commercial clients see all projects.</p>
+          <div class="app-card-roles">
+            <span class="app-card-role">Commercial</span>
+            <span class="app-card-role">Industrial</span>
+            <span class="app-card-role">Residential</span>
+          </div>
+        </div>
+        <div class="app-card fade-in delay-2">
+          <div class="app-card-icon" style="background:var(--amber-glow);color:var(--amber);">
+            <i data-lucide="smartphone" style="width:28px;height:28px;"></i>
+          </div>
+          <h3>Field App (PWA)</h3>
+          <p>Voice walkthroughs, clock in/out, daily assignments, photo capture, time tracking. Works offline with background sync.</p>
+          <div class="app-card-roles">
+            <span class="app-card-role">Electricians</span>
+            <span class="app-card-role">Lead Tech</span>
+          </div>
+        </div>
+        <div class="app-card fade-in delay-3">
+          <div class="app-card-icon" style="background:var(--violet-glow);color:var(--violet);">
+            <i data-lucide="server" style="width:28px;height:28px;"></i>
+          </div>
+          <h3>API Server</h3>
+          <p>Business logic, AI pipeline, voice transcription, catalog matching, QuickBooks sync. The brain behind every app.</p>
+          <div class="app-card-roles">
+            <span class="app-card-role">REST API</span>
+            <span class="app-card-role">Webhooks</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKFLOW -->
+  <section class="workflow" id="how-it-works">
+    <div class="container">
+      <div class="workflow-header">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">From Walkthrough to Invoice in <span class="gradient-text">One Flow</span></h2>
+        <p class="section-desc">No more switching between apps. Every step — from first call to final payment — lives in one system.</p>
+      </div>
+      <div class="workflow-steps">
+        <div class="workflow-step fade-in">
+          <div class="workflow-step-num">1</div>
+          <h4>Lead Intake</h4>
+          <p>Email, phone, or portal — all leads land in one unified queue</p>
+        </div>
+        <div class="workflow-step fade-in delay-1">
+          <div class="workflow-step-num">2</div>
+          <h4>Walkthrough</h4>
+          <p>Crew records voice, captures photos, browses catalog on-site</p>
+        </div>
+        <div class="workflow-step fade-in delay-2">
+          <div class="workflow-step-num">3</div>
+          <h4>AI Estimate</h4>
+          <p>AI extracts items, matches catalog, calculates labor. Owner reviews.</p>
+        </div>
+        <div class="workflow-step fade-in delay-3">
+          <div class="workflow-step-num">4</div>
+          <h4>Send &amp; Track</h4>
+          <p>Branded PDF to customer. Track opens, approvals, and rejections.</p>
+        </div>
+        <div class="workflow-step fade-in delay-4">
+          <div class="workflow-step-num">5</div>
+          <h4>Execute &amp; Invoice</h4>
+          <p>Schedule crew, track time, close out job, invoice syncs to QB.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial-section">
+    <div class="container">
+      <div class="testimonial-inner">
+        <div style="color:var(--amber);margin-bottom:24px;">
+          <i data-lucide="quote" style="width:40px;height:40px;"></i>
+        </div>
+        <p class="testimonial-quote">"I was spending 15 hours a week on estimates alone. Now my guys walk the job, talk through the scope, and I get a draft estimate waiting for me by the time they're back in the truck. It's not replacing me — it's giving me my week back."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">CL</div>
+          <div style="text-align:left;">
+            <div class="testimonial-name">Copper Line Electric</div>
+            <div class="testimonial-role">Residential &amp; Commercial Electrical Contractor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="section-label">Get Started</div>
+      <h2 class="section-title">Ready to Eliminate the Estimation Bottleneck?</h2>
+      <p class="section-desc">See how ExpertAssistant works with your actual QuickBooks catalog and real job data. Onboarding takes less than a week.</p>
+      <div class="cta-ctas">
+        <a href="mailto:sales@tekomni.com" class="btn btn-white btn-lg">
+          Request a Demo
+          <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+        </a>
+        <a href="mailto:sales@tekomni.com" class="btn btn-outline-white btn-lg">
+          Talk to Us
+          <i data-lucide="message-circle" style="width:18px;height:18px;"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <a href="#" class="nav-logo" style="font-size:18px;">
+          <div class="nav-logo-icon" style="width:30px;height:30px;">
+            <i data-lucide="zap" style="width:16px;height:16px;color:white;"></i>
+          </div>
+          ExpertAssistant
+        </a>
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#platform">Platform</a>
+          <a href="mailto:sales@tekomni.com">Contact</a>
+        </div>
+        <div class="footer-copy">&copy; 2026 TekOmni LLC. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    lucide.createIcons();
+  </script>
+</body>
+</html>
